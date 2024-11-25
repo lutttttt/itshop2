@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from time import sleep
 
 from .forms import *
 from django.views.generic import CreateView , ListView
@@ -42,7 +43,12 @@ class AddProduct(CreateView):
     form_class = ProductForm
     template_name = 'shop/add_category.html'
     success_url = reverse_lazy('home')
-
+    def form_valid(self, form):
+        form.instance.user=self.request.user.id
+        print(self.request.user.id)
+        sleep(10)
+        form.save()
+        return super().form_valid(form)
 
 class Products(ListView):
     model = Product
